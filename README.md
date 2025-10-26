@@ -3,6 +3,10 @@
 
 > **Transform raw market data into actionable intelligence.** This isn't just another stock tracker—it's your personal quantitative analyst, data scientist, and trading strategist rolled into one powerful application.
 
+## 🌐 **[Try It Live Now!](https://anshuman123-dev-stock-analysis-and-forcastin-trading-app-11gsrh.streamlit.app/Stock_Prediction)**
+
+**No installation required. No credit card. No excuses.** Experience the power of institutional-grade analytics directly in your browser.
+
 ---
 
 ## 🌟 Why This Application Changes Everything
@@ -50,6 +54,15 @@ Trading without risk management is gambling. We've built the guardrails:
 ---
 
 ## 🚀 Getting Started: Your Journey to Market Mastery
+
+### **🌟 Option 1: Instant Access (Recommended)**
+**[Launch the Live App →](https://anshuman123-dev-stock-analysis-and-forcastin-trading-app-11gsrh.streamlit.app/Stock_Prediction)**
+
+Zero setup. Zero hassle. Start analyzing in 3 seconds.
+
+---
+
+### **💻 Option 2: Run Locally (For Developers)**
 
 ### **Step 1: Clone Your Edge**
 ```bash
@@ -166,6 +179,10 @@ MIT License—free as in freedom, free as in beer. See LICENSE file for the fine
 
 ## 🔥 Ready to Transform Your Trading?
 
+### **🚀 Quick Start:**
+**[Launch Live App](https://anshuman123-dev-stock-analysis-and-forcastin-trading-app-11gsrh.streamlit.app/Stock_Prediction)** ← Start analyzing immediately
+
+### **⚙️ Developer Setup:**
 ```bash
 git clone <repository-url>
 streamlit run Trading_App.py
