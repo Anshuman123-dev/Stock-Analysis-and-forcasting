@@ -4,7 +4,7 @@ import yfinance as yf
 import plotly.graph_objects as go
 import datetime
 import ta
-from pages.utils.plotly_figure import plotly_table
+from pages.utils.plotly_figure import plotly_table, candlestick, RSI, MACD, close_chart, Moving_average
 
 # setting page config
 st.set_page_config(
@@ -19,8 +19,33 @@ col1, col2, col3 = st.columns(3)
 
 today = datetime.date.today()
 
+# Popular stock tickers
+popular_stocks = {
+    'Apple': 'AAPL',
+    'Microsoft': 'MSFT',
+    'Google': 'GOOGL',
+    'Amazon': 'AMZN',
+    'Tesla': 'TSLA',
+    'Meta (Facebook)': 'META',
+    'NVIDIA': 'NVDA',
+    'Netflix': 'NFLX',
+    'AMD': 'AMD',
+    'Intel': 'INTC',
+    'Coca-Cola': 'KO',
+    'Disney': 'DIS',
+    'Nike': 'NKE',
+    'Visa': 'V',
+    'Mastercard': 'MA',
+    'JPMorgan': 'JPM',
+    'Bank of America': 'BAC',
+    'Walmart': 'WMT',
+    'Pfizer': 'PFE',
+    'Johnson & Johnson': 'JNJ'
+}
+
 with col1:
-    ticker = st.text_input("Stock Ticker", "TSLA")
+    stock_name = st.selectbox("Select Stock", list(popular_stocks.keys()), index=4)
+    ticker = popular_stocks[stock_name]
 with col2:
     start_date = st.date_input("Choose Start Date", datetime.date(today.year -1, today.month, today.day))
 with col3:
@@ -62,28 +87,28 @@ st.plotly_chart(fig_df, use_container_width=True)
 
 col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12 = st.columns([1,1,1,1,1,1,1,1,1,1,1,1,])
 
-    num_period='' 
-    with col1:
-        if st.button('5D'):
-            num_period='5d'
-    with col2:
-        if st.button('1M'):
-            num_period='1mo'
-    with col3:
-        if st.button('6M'):
-            num_period='6mo'
-    with col4:
-        if st.button('YTD'):
-            num_period='ytd'
-    with col5:
-        if st.button('1Y'):
-            num_period='1y'
-    with col6:
-        if st.button('5Y'):
-            num_period='5y'
-    with col7:
-        if st.button('MAX'):
-            num_period='max'
+num_period='' 
+with col1:
+    if st.button('5D'):
+        num_period='5d'
+with col2:
+    if st.button('1M'):
+        num_period='1mo'
+with col3:
+    if st.button('6M'):
+        num_period='6mo'
+with col4:
+    if st.button('YTD'):
+        num_period='ytd'
+with col5:
+    if st.button('1Y'):
+        num_period='1y'
+with col6:
+    if st.button('5Y'):
+        num_period='5y'
+with col7:
+    if st.button('MAX'):
+        num_period='max'
 
 col1, col2, col3= st.columns([1,1,4])
 with col1:

@@ -1,4 +1,4 @@
- import yfinance as yf
+import yfinance as yf
 from statsmodels.tsa.stattools import adfuller
 from sklearn.metrics import mean_squared_error, r2_score
 from statsmodels.tsa.arima.model import ARIMA
@@ -33,8 +33,21 @@ def get_differencing_order(close_price):
     return d
 
 def fit_model(data, differencing_order):
-    model = ARIMA(data, order=(30, differencing_order, 30))
-    model_fit = model.fit()
+    # Convert to pandas Series for ARIMA if it's not already
+    if isinstance(data, np.ndarray):
+        data = pd.Series(data, dtype=float)
+    elif isinstance(data, pd.DataFrame):
+        data = pd.Series(data.iloc[:, 0], dtype=float)
+    
+    # Use simpler ARIMA model to avoid convergence issues
+    # Reduced from (30, d, 30) to (5, d, 2) for better stability
+    try:
+        model = ARIMA(data, order=(5, differencing_order, 2))
+        model_fit = model.fit()
+    except:
+        # If convergence fails, try even simpler model
+        model = ARIMA(data, order=(2, differencing_order, 1))
+        model_fit = model.fit()
 
     forecast_steps = 30
     forecast = model_fit.get_forecast(steps=forecast_steps)
@@ -43,6 +56,9 @@ def fit_model(data, differencing_order):
     return predictions
 
 def evaluate_model(original_price, differencing_order):
+    # Convert to numpy array for slicing if it's not already
+    if isinstance(original_price, np.ndarray):
+        original_price = pd.Series(original_price.flatten())
     train_data, test_data = original_price[:-30], original_price[-30:]
     predictions = fit_model(train_data, differencing_order)
     rmse = np.sqrt(mean_squared_error(test_data, predictions))
@@ -51,16 +67,18 @@ def evaluate_model(original_price, differencing_order):
 def scaling(close_price):
     scaler = StandardScaler()
     scaled_data = scaler.fit_transform(np.array(close_price).reshape(-1,1))
-    return scaled_data, scaler
+    # Return as 1D array for ARIMA compatibility
+    return scaled_data.flatten(), scaler
 
 def get_forecast(original_price, differencing_order):
     predictions = fit_model(original_price, differencing_order)
     start_date = datetime.now().strftime('%Y-%m-%d')
     end_date = (datetime.now() + timedelta(days = 29)).strftime('%Y-%m-%d')
     forecast_index = pd.date_range(start=start_date, end=end_date, freq='D')
-    forecast_df = pd.DataFrame(predictions, index = forecast_index, columns = ['Close'])
+    # predictions is a pandas Series, we need to extract values and create DataFrame
+    forecast_df = pd.DataFrame({'Close': predictions.values}, index=forecast_index)
     return forecast_df
 
 def inverse_scaling(scaler, scaled_data):
     close_price = scaler.inverse_transform(np.array(scaled_data).reshape(-1,1))
-    return close_price
+    return close_price.flatten()
